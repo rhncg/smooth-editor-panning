@@ -18,6 +18,7 @@ class $modify(ModLevelEditorLayer, LevelEditorLayer) {
         if (!m_fields->m_isPanning) {
             if (std::abs(m_fields->m_cameraVelocity.x) > 0.1f ||
                 std::abs(m_fields->m_cameraVelocity.y) > 0.1f) {
+
                 if (this->m_objectLayer) {
                     auto currentPos = this->m_objectLayer->getPosition();
 
@@ -46,6 +47,7 @@ class $modify(ModEditorUI, EditorUI) {
     bool ccTouchBegan(CCTouch *touch, CCEvent *event) {
         if (!EditorUI::ccTouchBegan(touch, event))
             return false;
+
         if (this->m_editorLayer) {
             auto layer =
                 static_cast<ModLevelEditorLayer *>(this->m_editorLayer);
@@ -57,30 +59,39 @@ class $modify(ModEditorUI, EditorUI) {
     }
 
     void ccTouchMoved(CCTouch *touch, CCEvent *event) {
+        cocos2d::CCPoint posBefore = cocos2d::CCPoint(0, 0);
+        ModLevelEditorLayer *layer = nullptr;
+
+        if (this->m_editorLayer && this->m_editorLayer->m_objectLayer) {
+            layer = static_cast<ModLevelEditorLayer *>(this->m_editorLayer);
+            posBefore = layer->m_objectLayer->getPosition();
+        }
+
         EditorUI::ccTouchMoved(touch, event);
 
-        if (this->m_editorLayer) {
-            auto layer =
-                static_cast<ModLevelEditorLayer *>(this->m_editorLayer);
+        if (layer && layer->m_objectLayer) {
+            cocos2d::CCPoint posAfter = layer->m_objectLayer->getPosition();
 
             auto now = std::chrono::steady_clock::now();
             std::chrono::duration<float> elapsed =
                 now - layer->m_fields->m_lastMoveTime;
             float dt = elapsed.count();
 
-            if (dt > 0.001f) {
-                cocos2d::CCPoint currentTouch = touch->getLocation();
-                cocos2d::CCPoint previousTouch = touch->getPreviousLocation();
+            if (posBefore != posAfter) {
+                if (dt > 0.001f) {
+                    float instantVelX = (posAfter.x - posBefore.x) / dt;
+                    float instantVelY = (posAfter.y - posBefore.y) / dt;
 
-                float instantVelX = (currentTouch.x - previousTouch.x) / dt;
-                float instantVelY = (currentTouch.y - previousTouch.y) / dt;
-
-                layer->m_fields->m_cameraVelocity.x =
-                    (layer->m_fields->m_cameraVelocity.x * 0.4f) +
-                    (instantVelX * 0.6f);
-                layer->m_fields->m_cameraVelocity.y =
-                    (layer->m_fields->m_cameraVelocity.y * 0.4f) +
-                    (instantVelY * 0.6f);
+                    layer->m_fields->m_cameraVelocity.x =
+                        (layer->m_fields->m_cameraVelocity.x * 0.4f) +
+                        (instantVelX * 0.6f);
+                    layer->m_fields->m_cameraVelocity.y =
+                        (layer->m_fields->m_cameraVelocity.y * 0.4f) +
+                        (instantVelY * 0.6f);
+                }
+            } else {
+                layer->m_fields->m_cameraVelocity =
+                    cocos2d::CCPoint(0.0f, 0.0f);
             }
 
             layer->m_fields->m_lastMoveTime = now;
