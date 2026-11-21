@@ -3,8 +3,7 @@
 	"gd": {
 		"win": "2.2091",
 		"android": "2.2091",
-		"mac": "2.2091",
-		"ios": "2.2091"
+		"mac": "2.2091"
 	},
 	"id": "rcg21.smooth-editor-panning",
 	"name": "Smooth Editor Panning",
@@ -15,6 +14,7 @@
 		"geode.node-ids": ">=v1.23.3"
 	},
 	"tags": ["editor", "enhancement", "offline"],
+	"links": {"source": "https://github.com/rhncg/smooth-editor-panning"},
 	"settings": {
 		"damping-force": {
 			"name": "damping-force",
