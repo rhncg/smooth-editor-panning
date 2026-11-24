@@ -8,11 +8,13 @@
 	},
 	"id": "rcg21.smooth-editor-panning",
 	"name": "Smooth Editor Panning",
-	"version": "v1.0.2",
+	"version": "v1.0.3",
 	"developer": "RCG21",
 	"description": "Adds velocity-based panning to the editor",
 	"dependencies": {
-		"geode.node-ids": ">=v1.23.3"
+		"geode.node-ids": ">=v1.23.3",
+		"alphalaneous.alphas-ui-pack": ">=v1.5.0-beta.1",
+		"alphalaneous.editor-touch-api": ">=v1.0.0-beta.4"
 	},
 	"tags": ["editor", "enhancement", "offline"],
 	"links": {"source": "https://github.com/rhncg/smooth-editor-panning"},

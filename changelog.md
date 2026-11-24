@@ -1,3 +1,6 @@
+# 1.0.3
+- Fixed compatibility with [Tinker](mod:alphalaneous.tinker)
+
 # 1.0.2
 - iOS is back
 
